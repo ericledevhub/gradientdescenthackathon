@@ -3,7 +3,6 @@ import os
 import asyncio
 import chainlit as cl
 
-from src.ingestion.llama_parser_async import arun_entire_ingestion_pipeline
 from src.ingestion.llama_parser import run_entire_ingestion_pipeline
 
 # --------------------- Core  ------------------------- #
@@ -74,9 +73,11 @@ async def ask_user_file():
 
     try:
         # Simulate a processing delay, replace this with actual logic
+        asyncio.sleep(3)
         run_entire_ingestion_pipeline(
             project_path=PROJECT_PATH,
             file_path=file.path,
+            pre_load=False,
         )
 
     finally:

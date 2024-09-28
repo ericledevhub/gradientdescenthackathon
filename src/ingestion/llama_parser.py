@@ -39,16 +39,18 @@ COHERE_API_KEY = os.environ["COHERE_API_KEY"]
 
 def run_entire_ingestion_pipeline(
         project_path: str,
-        file_path: str 
+        file_path: str,
+        pre_load: bool=False,
     ) -> VectorStoreIndex:
     
-    print("Running LLama Parser For Parsing Documets ...")
-    documents = get_documents_from_llama_parser(file_path)
-    nodes = transform_documents_and_insert_into_vector_store(
-        documents=documents,
-        project_path=project_path,
-    )
-
+    if not pre_load:
+        print("Running LLama Parser For Parsing Documets ...")
+        documents = get_documents_from_llama_parser(file_path)
+        nodes = transform_documents_and_insert_into_vector_store(
+            documents=documents,
+            project_path=project_path,
+        )
+    
     vector_store_index = get_vector_store_index(
         project_path=project_path,
     )
