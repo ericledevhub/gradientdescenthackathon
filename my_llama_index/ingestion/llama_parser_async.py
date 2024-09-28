@@ -3,25 +3,17 @@ from llama_parse import LlamaParse
 
 from typing import (
     List,
-    Union,
     Sequence,
 )
 
 # --------------------- Core  ------------------------- #
-from llama_index.core.query_engine import CitationQueryEngine
-
-
-# --------------------- Core  ------------------------- #
 from llama_index.core import (
-    SimpleDirectoryReader,
     VectorStoreIndex, 
-    StorageContext,
     Settings,
 )
 
 # --------------------- Node Parsers  ------------------------- #
 from llama_index.core.node_parser import MarkdownNodeParser
-from llama_index.postprocessor.cohere_rerank import CohereRerank
 from llama_index.core.ingestion import IngestionPipeline
 
 
@@ -35,8 +27,7 @@ from llama_index.core.schema import (
 # --------------------- Vector Stores  ------------------------- #
 import chromadb
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from chromadb.api import AdminAPI, AsyncClientAPI, ClientAPI
-from chromadb.api.models.Collection import Collection
+from chromadb.api import ClientAPI
 
 
 # -------------------------- Constants --------------------- #

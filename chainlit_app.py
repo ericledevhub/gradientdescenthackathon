@@ -13,8 +13,6 @@ from llama_index.core import (
 # --------------------- LLM Chat  ------------------------- #
 
 from llama_index.core.callbacks import CallbackManager
-from llama_index.core.memory import ChatMemoryBuffer
-from llama_index.core.storage.chat_store import SimpleChatStore
 
 # --------------------- LLM Agent  ------------------------- #
 
@@ -89,8 +87,14 @@ async def ask_user_file():
             pass
 
     # Inform user that processing is complete
-    msg.content = f"`{file.name}` processed. You can now ask questions!"
-    await msg.update()
+    msg.content = f"The file has been successfully processed. You can view it here {file.name} and start asking questions!"
+    msg.elements = [
+        cl.Pdf(
+            name=file.name,
+            path=file.path,
+            display="side",
+        )
+    ]
 
 # Function to simulate spinner during processing
 async def simulate_processing(msg, file):
