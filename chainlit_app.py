@@ -96,6 +96,9 @@ async def ask_user_file():
         )
     ]
 
+    await msg.update()
+
+
 # Function to simulate spinner during processing
 async def simulate_processing(msg, file):
     spinner = ['|', '/', '-', '\\']
@@ -146,13 +149,6 @@ async def agent_setup():
 
     # Store necessary objects in the user session
     cl.user_session.set("react_agent", react_agent)
-
-
-    await cl.Message(
-        author="Assistant", 
-        content="Hello! Im an AI assistant. How may I help you?"
-    ).send()
-
 
 
 
