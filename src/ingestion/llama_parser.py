@@ -6,6 +6,7 @@ from typing import (
     Sequence,
 )
 
+
 # --------------------- Core  ------------------------- #
 from llama_index.core import (
     VectorStoreIndex, 
@@ -29,7 +30,6 @@ from src.vector_stores.chroma import (
     get_chroma_vector_store,
 )
 
-
 # -------------------------- Constants --------------------- #
 
 LLAMA_CLOUD_API_KEY = os.environ["LLAMA_CLOUD_API_KEY"]
@@ -37,19 +37,14 @@ COHERE_API_KEY = os.environ["COHERE_API_KEY"]
 
 
 
-async def arun_entire_ingestion_pipeline(
+def run_entire_ingestion_pipeline(
         project_path: str,
         file_path: str 
     ) -> VectorStoreIndex:
     
     print("Running LLama Parser For Parsing Documets ...")
-    documents = await aget_documents_from_llama_parser(file_path)
-    documents = add_metadata(
-        documents=documents,
-        file_path=file_path,
-    )
-    documents = []
-    nodes = atransform_documents_and_insert_into_vector_store(
+    documents = get_documents_from_llama_parser(file_path)
+    nodes = transform_documents_and_insert_into_vector_store(
         documents=documents,
         project_path=project_path,
     )
@@ -64,41 +59,36 @@ async def arun_entire_ingestion_pipeline(
 
 # --------------------- Use LLama Parser To Read Documents  ------------------------- #
 
-async def aget_documents_from_llama_parser(
+def get_documents_from_llama_parser(
         file_path: str
     ) -> List[Document]:
 
+    files = [file_path]
+    for file_path in files:
+        documents = LlamaParse(
+            api_key=LLAMA_CLOUD_API_KEY,
+            result_type="markdown",
+        ).load_data(
+            file_path=file_path,
+        )
 
-    documents = await LlamaParse(
-        api_key=LLAMA_CLOUD_API_KEY,
-        result_type="markdown",
-    ).aload_data(
-        file_path=file_path,
-    )
+        # Add additional metadata that is not extracted by llama parser 
+        for i, doc in enumerate(documents):
+            meta_data = {
+                "page_label": f"{i+1}",
+                "file_name" : os.path.basename(file_path)
+            }
 
-    return documents
+            doc.metadata = meta_data
+            doc.excluded_embed_metadata_keys = ["file_name"]
+            doc.excluded_llm_metadata_keys = ["file_name"]
 
-def add_metadata(
-        documents: List[Document], 
-        file_path: str,
-    ):
-    # Add additional metadata that is not extracted by llama parser 
-    for i, doc in enumerate(documents):
-        meta_data = {
-            "page_label": f"{i+1}",
-            "file_name" : os.path.basename(file_path)
-        }
-
-        doc.metadata = meta_data
-        doc.excluded_embed_metadata_keys = ["file_name"]
-        doc.excluded_llm_metadata_keys = ["file_name"]
-    
     return documents
 
 
 # --------------------- Node Post Processor  ------------------------- #
 
-def atransform_documents_and_insert_into_vector_store(
+def transform_documents_and_insert_into_vector_store(
         documents: List[Document], 
         project_path: str,
     ) -> Sequence[BaseNode]:
@@ -117,7 +107,7 @@ def atransform_documents_and_insert_into_vector_store(
         vector_store=vector_store
     )
 
-    nodes = pipeline.arun(
+    nodes = pipeline.run(
         documents=documents,
     )
 
@@ -136,4 +126,3 @@ def get_vector_store_index(
     return VectorStoreIndex.from_vector_store(
         vector_store=vector_store,
     )
-

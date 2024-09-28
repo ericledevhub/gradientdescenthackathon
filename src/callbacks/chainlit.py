@@ -118,7 +118,7 @@ class LlamaIndexCallbackHandler(TokenCountingHandler):
                     Text(
                         name=f"Source {idx+1}",
                         content=source.text or "Empty node",
-                        display="side",
+                        display="inline",
                     )
                     for idx, source in enumerate(source_nodes)
                 ]
@@ -135,7 +135,7 @@ class LlamaIndexCallbackHandler(TokenCountingHandler):
                 step.elements = [
                     Text(
                         name=f"Source {idx+1}",
-                        display="side",
+                        display="inline",
                         content=f"Page: {source.node.metadata.get("page_label", 0)}\n\n{source.node.get_text()}" or "Empty node",
                     )
                     for idx, source in enumerate(sources)

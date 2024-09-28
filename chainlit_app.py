@@ -4,6 +4,7 @@ import asyncio
 import chainlit as cl
 
 from src.ingestion.llama_parser_async import arun_entire_ingestion_pipeline
+from src.ingestion.llama_parser import run_entire_ingestion_pipeline
 
 # --------------------- Core  ------------------------- #
 from llama_index.core import (
@@ -44,8 +45,8 @@ PLOTLY_FIGURE_OBJECT_KEY = "plotly_figure_object"
 
 
 WELCOME_MESSAGE = """Welcome to the React Agent With RAG and Plot Tools! To get started:
-1. Upload a PDF or text file
-2. Ask a question about the file
+1. Upload a PDF of your choice.
+2. Ask any questions related to the content of the file.
 """
 
 
@@ -73,7 +74,7 @@ async def ask_user_file():
 
     try:
         # Simulate a processing delay, replace this with actual logic
-        await arun_entire_ingestion_pipeline(
+        run_entire_ingestion_pipeline(
             project_path=PROJECT_PATH,
             file_path=file.path,
         )
@@ -136,7 +137,9 @@ async def agent_setup():
 
     # Tools     
     tools = [
-        query_engine_tool(),
+        query_engine_tool(
+            project_path=PROJECT_PATH,
+        ),
         agenerate_plotly_figure_tool(),
     ]
 

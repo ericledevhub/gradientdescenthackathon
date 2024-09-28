@@ -22,10 +22,14 @@ from src.vector_stores.chroma import (
 COHERE_API_KEY = os.environ["COHERE_API_KEY"]
 
 
-def query_engine_tool() -> QueryEngineTool:
+def query_engine_tool(
+        project_path: str,
+) -> QueryEngineTool:
 
     # Initialize vector store and index
-    vector_store = get_chroma_vector_store()
+    vector_store = get_chroma_vector_store(
+        project_path=project_path,
+    )
     vector_index = VectorStoreIndex.from_vector_store(
         vector_store=vector_store,
     )
