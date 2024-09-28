@@ -15,7 +15,7 @@ from llama_index.postprocessor.cohere_rerank import CohereRerank
 
 # --------------------- Own Functions  ------------------------- #
 
-from my_llama_index.vector_stores.chroma import (
+from src.vector_stores.chroma import (
     get_chroma_vector_store,
 )
 

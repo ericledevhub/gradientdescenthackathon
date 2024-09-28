@@ -3,7 +3,7 @@ import os
 import asyncio
 import chainlit as cl
 
-from my_llama_index.ingestion.llama_parser_async import arun_entire_ingestion_pipeline
+from src.ingestion.llama_parser_async import arun_entire_ingestion_pipeline
 
 # --------------------- Core  ------------------------- #
 from llama_index.core import (
@@ -26,9 +26,9 @@ from llama_index.llms.openai import OpenAI
 
 # --------------------- Own Functions  ------------------------- #
 
-from my_llama_index.tools.retriever_tool import query_engine_tool
-from my_llama_index.tools.plotly_tool import agenerate_plotly_figure_tool
-from my_llama_index.callbacks.chainlit import LlamaIndexCallbackHandler
+from src.tools.retriever_tool import query_engine_tool
+from src.tools.plotly_tool import agenerate_plotly_figure_tool
+from src.callbacks.chainlit import LlamaIndexCallbackHandler
 
 
 # --------------------- Constants  ------------------------- #
